@@ -1,0 +1,25 @@
+# Vending Machine Demo Script
+
+## Step 1: Insert Money
+- Select option 2 (Insert Money)
+- Enter amount: 5.00
+  This will give us enough to buy 2 Colas ($1.50 each) and 1 Chips ($1.25), totaling $4.25
+
+## Step 2: Purchase First Cola
+- Select option 3 (Purchase Product)
+- Enter product ID: A1 (Cola)
+
+## Step 3: Purchase Second Cola
+- Select option 3 (Purchase Product)
+- Enter product ID: A1 (Cola)
+
+## Step 4: Purchase Chips
+- Select option 3 (Purchase Product)
+- Enter product ID: B1 (Chips)
+
+## Step 5: Get Change
+- Select option 4 (Return Change)
+  We should receive $0.75 in change
+
+## Step 6: Exit
+- Select option Q to quit
