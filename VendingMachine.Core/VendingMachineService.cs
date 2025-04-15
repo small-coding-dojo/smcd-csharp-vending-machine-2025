@@ -5,6 +5,7 @@ namespace VendingMachine.Core;
 /// </summary>
 public class VendingMachineService
 {
+    private readonly Products _alternativeProducts = new Products();
     private readonly List<Product> _products;
     private decimal _balance;
 
@@ -93,4 +94,10 @@ public class VendingMachineService
         _balance = 0;
         return change;
     }
+}
+
+internal class Products
+{
+    private Dictionary<StorageCode, Product> _products = new();
+
 }
