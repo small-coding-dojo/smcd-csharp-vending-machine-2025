@@ -20,6 +20,8 @@ public class VendingMachineService
     /// </summary>
     public void InitializeWithDefaultProducts()
     {
+        _alternativeProducts.CreateProduct("Cola",1.50m,10);
+
         _products.Clear();
         _products.Add(new Product("A1", "Cola", 1.50m, 10));
         _products.Add(new Product("A2", "Water", 1.00m, 10));
@@ -100,4 +102,13 @@ internal class Products
 {
     private Dictionary<StorageCode, Product> _products = new();
 
+    internal void CreateProduct(string productName, decimal price, int quantity)
+    {
+        var product = new Product("",productName,price,quantity);
+        _products.Add("A1",product);
+    }
+
+    internal readonly record struct StorageCode(String code);
+
 }
+
