@@ -17,4 +17,9 @@ public class Product
         Price = price;
         Quantity = quantity;
     }
+
+    public override string ToString()
+    {
+        return $"{Id}\t{Name, -10}\t{Price:C}\t{Quantity}";
+    }
 }

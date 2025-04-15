@@ -67,7 +67,8 @@ public class Program
         
         foreach (var product in products)
         {
-            Console.WriteLine($"{product.Id}\t{product.Name,-10}\t{product.Price:C}\t{product.Quantity}");
+            Console.WriteLine(product.ToString());
+            //Console.WriteLine($"{product.Id}\t{product.Name,-10}\t{product.Price:C}\t{product.Quantity}");
         }
     }
 
