@@ -21,6 +21,9 @@ public class VendingMachineService
     public void InitializeWithDefaultProducts()
     {
         _alternativeProducts.CreateProduct("Cola",1.50m,10);
+        _alternativeProducts.CreateProduct("Water", 1.00m, 10);
+        _alternativeProducts.CreateProduct("Chips", 1.25m, 10);
+        _alternativeProducts.CreateProduct("Chocolate", 1.75m, 10);
 
         _products.Clear();
         _products.Add(new Product("A1", "Cola", 1.50m, 10));
@@ -64,6 +67,7 @@ public class VendingMachineService
     public string PurchaseProduct(string productId)
     {
         var product = _products.FirstOrDefault(p => p.Id == productId);
+        product = _alternativeProducts.ByStorage(productId);
         
         if (product == null)
         {
@@ -104,8 +108,8 @@ internal class Products
 
     internal void CreateProduct(string productName, decimal price, int quantity)
     {
-        var product = new Product("",productName,price,quantity);
-        _products.Add("A1",product);
+        var product = new Product("", productName, price, quantity);
+        _products.Add(new StorageCode($"A{_products.Count + 1}"),product);
     }
 
     internal readonly record struct StorageCode(String code);
