@@ -1,5 +1,7 @@
 # Vending Machine CLI Application
 
+[Kata Description](./KataDescription.md)
+
 A simple C# console application that simulates a vending machine.
 
 ## How to Run
