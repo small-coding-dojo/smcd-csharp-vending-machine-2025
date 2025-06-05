@@ -6,14 +6,15 @@ namespace VendingMachine.CLI;
 public class VendingMachineImplementation
 {
     private readonly ICanDisplay _display;
-    private readonly ImmutableList<CoinTemplate> _coinTemplates = ImmutableList.Create<CoinTemplate>(
-        new CoinTemplate(5.0, 21.21, 1.95, 0.05m),
-        new CoinTemplate(2.268, 17.91, 1.35, 0.10m));
+    private readonly ImmutableList<CoinTemplate> _coinTemplates;
 
     private decimal _balance = 0;
 
     public VendingMachineImplementation(ICanDisplay display) 
     {
+        _coinTemplates = ImmutableList.Create(
+            new CoinTemplate(5.0, 21.21, 1.95, 0.05m),
+            new CoinTemplate(2.268, 17.91, 1.35, 0.10m));
         _display = display;
         _display.Show("INSERT COIN");
     }
@@ -48,16 +49,15 @@ public class VendingMachineImplementation
 
     private CoinTemplate FindNearestCoin(Coin inputCoin)
     {
-        var distances = new Dictionary<double, CoinTemplate>();
+        var absoluteWeightDifferences = new Dictionary<double, CoinTemplate>();
         foreach (var coinTemplate in _coinTemplates)
         {
-            var weightDistance = Math.Abs(coinTemplate.Weight - inputCoin.Weight);
-            distances.Add(weightDistance, coinTemplate);
+            var absoluteWeightDifference = Math.Abs(coinTemplate.Weight - inputCoin.Weight);
+            absoluteWeightDifferences.Add(absoluteWeightDifference, coinTemplate);
         }
 
-        var result = distances.Keys.Min();
-        var result2 = distances[result];
+        var minimumWeightDifference = absoluteWeightDifferences.Keys.Min();
 
-        return result2;
+        return absoluteWeightDifferences[minimumWeightDifference];
     }
 }
