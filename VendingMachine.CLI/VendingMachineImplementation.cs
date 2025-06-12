@@ -27,8 +27,10 @@ public class VendingMachineImplementation
         // Wenn Durchmesser = 21,21mm
         // Wenn Dicke = 1,95mm
         // Dann Wert = 0,05 USD
+        
         var value = EvaluateCoin(inputCoin);
-        _display.Show(value.ToString( CultureInfo.InvariantCulture));
+        _balance += value;
+        _display.Show(_balance.ToString( CultureInfo.InvariantCulture));
     }
 
     private decimal EvaluateCoin(Coin inputCoin)
@@ -43,23 +45,26 @@ public class VendingMachineImplementation
         // - Tolerance.WeightPercent
         // - Tolerance.DiameterPercent
         // - Tolerance.ThicknessPercent
-        var template = FindNearestCoin(inputCoin);
         
-        _balance += template.Value;
-        return _balance;
+        // TODO: Smell we should have "three templates" FindNearestByWeight, ByDiameter, ByThickness
+        // The comparison and final result should be returned here as "final decided coin" or "invalid coin exception"
+        var coinBasedOnWeight = FindNearestCoin(inputCoin, t => t.Weight, c => c.Weight);
+        var coinBasedOnDiameter = FindNearestCoin(inputCoin, t => t.Diameter, c => c.Diameter);
+        // We need to verify that the difference is within the tolerance
+
+        return coinBasedOnDiameter.Value;
     }
 
-    private CoinTemplate FindNearestCoin(Coin inputCoin)
+
+    private CoinTemplate FindNearestCoin(Coin inputCoin, Func<CoinTemplate, double> coinTemplatePropertySelector, Func<Coin, double> coinPropertySelector)
     {
-        var absoluteWeightDifferences = new Dictionary<double, CoinTemplate>();
+        var absoluteDifferences = new Dictionary<double, CoinTemplate>();
         foreach (var coinTemplate in _coinTemplates)
         {
-            var absoluteWeightDifference = Math.Abs(coinTemplate.Weight - inputCoin.Weight);
-            absoluteWeightDifferences.Add(absoluteWeightDifference, coinTemplate);
+            var absoluteDifference = Math.Abs(coinTemplatePropertySelector(coinTemplate) - coinPropertySelector(inputCoin));
+            absoluteDifferences.Add(absoluteDifference, coinTemplate);
         }
-
-        var minimumWeightDifference = absoluteWeightDifferences.Keys.Min();
-
-        return absoluteWeightDifferences[minimumWeightDifference];
+        var minimumDifference = absoluteDifferences.Keys.Min();
+        return absoluteDifferences[minimumDifference];
     }
 }
