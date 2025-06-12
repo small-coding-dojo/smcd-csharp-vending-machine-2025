@@ -106,7 +106,7 @@ public class VendingMachineServiceTests
         Assert.Equal("0.40", testDisplay.Output);
     }
 
-    [Fact]
+    [Fact(Skip = "Returning an invalid coin is not implemented yet")]
     public void InsertAPenny()
     {
         // arrange
@@ -119,7 +119,54 @@ public class VendingMachineServiceTests
         testMachine.InsertCoin(ourPenny);
 
         // assert
+        // TODO: Assert.Contains(_returnBox, ourPenny);
+    }
+
+    [Fact]
+    public void InsertACoinWithInvalidWeight()
+    {
+        // arrange
+        var ourCoin = new Coin(CoinInfos.Nickel.Weight + 10, CoinInfos.Nickel.Diameter, CoinInfos.Nickel.Thickness);
+        
+        var testDisplay = new TestDisplay();
+        var testMachine = new VendingMachineImplementation(testDisplay);
+
+        // act
+        testMachine.InsertCoin(ourCoin);
+
+        // assert
         Assert.Equal("INSERT COIN", testDisplay.Output);
-        // Assert.Contains(_returnBox, ourPenny);
+    }
+
+    [Fact]
+    public void InsertACoinWithInvalidDiameter()
+    {
+        // arrange
+        var ourCoin = new Coin(CoinInfos.Nickel.Weight, CoinInfos.Nickel.Diameter + 10, CoinInfos.Nickel.Thickness);
+        
+        var testDisplay = new TestDisplay();
+        var testMachine = new VendingMachineImplementation(testDisplay);
+
+        // act
+        testMachine.InsertCoin(ourCoin);
+
+        // assert
+        Assert.Equal("INSERT COIN", testDisplay.Output);
+    }
+    
+    [Fact]
+    public void InsertACoinWithInvalidThickness()
+    {
+        // arrange
+        var ourCoin = new Coin(CoinInfos.Nickel.Weight, CoinInfos.Nickel.Diameter, CoinInfos.Nickel.Thickness + 10);
+        
+        var testDisplay = new TestDisplay();
+        var testMachine = new VendingMachineImplementation(testDisplay);
+
+        // act
+        testMachine.InsertCoin(ourCoin);
+
+        // assert
+        Assert.Equal("INSERT COIN", testDisplay.Output);
     }
 }

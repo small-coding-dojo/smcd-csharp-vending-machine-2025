@@ -16,7 +16,7 @@ public class VendingMachineImplementation
         // Wenn Durchmesser = 21,21mm
         // Wenn Dicke = 1,95mm
         // Dann Wert = 0,05 USD
-        
+
         var value = EvaluateCoin(inputCoin);
         _balance += value;
 
@@ -26,7 +26,7 @@ public class VendingMachineImplementation
         }
     }
 
-    public VendingMachineImplementation(ICanDisplay display) 
+    public VendingMachineImplementation(ICanDisplay display)
     {
         _coinTemplates = ImmutableList.Create(
             new CoinTemplate(5.0, 21.21, 1.95, 0.05m),
@@ -50,15 +50,18 @@ public class VendingMachineImplementation
         // - Tolerance.WeightPercent
         // - Tolerance.DiameterPercent
         // - Tolerance.ThicknessPercent
-        
+
         var coinBasedOnWeight = FindNearestCoin(inputCoin, t => t.Weight, c => c.Weight);
         var coinBasedOnDiameter = FindNearestCoin(inputCoin, t => t.Diameter, c => c.Diameter);
         var coinBasedOnThickness = FindNearestCoin(inputCoin, t => t.Thickness, c => c.Thickness);
-        
-        // We need to verify that the difference is within the tolerance
-        var difference = Math.Abs(coinBasedOnDiameter.Diameter - inputCoin.Diameter);
-        var tolerance = coinBasedOnDiameter.Diameter * TolerancePercentage / 100.0;
-        if (difference > tolerance)
+
+        var isDiameterToleranceExceeded = IsToleranceExceeded(inputCoin, coinBasedOnDiameter, t => t.Diameter, c => c.Diameter);
+        var isWeightToleranceExceeded = IsToleranceExceeded(inputCoin, coinBasedOnWeight, t => t.Weight, c => c.Weight);
+        var isThicknessToleranceExceeded = IsToleranceExceeded(inputCoin, coinBasedOnThickness, t => t.Thickness, c => c.Thickness);
+
+        var isToleranceExceeded = isDiameterToleranceExceeded || isWeightToleranceExceeded || isThicknessToleranceExceeded;
+
+        if (isToleranceExceeded)
         {
             return 0.0m;
         }
@@ -66,15 +69,27 @@ public class VendingMachineImplementation
         return coinBasedOnDiameter.Value;
     }
 
+    private bool IsToleranceExceeded(Coin inputCoin, CoinTemplate coinTemplate,
+        Func<CoinTemplate, double> coinTemplatePropertySelector, Func<Coin, double> coinPropertySelector)
+    {
+        var difference = Math.Abs(coinTemplatePropertySelector(coinTemplate) - coinPropertySelector(inputCoin));
+        var tolerance = coinTemplatePropertySelector(coinTemplate) * TolerancePercentage / 100.0;
+        var isToleranceExceeded = difference > tolerance;
+        return isToleranceExceeded;
+    }
 
-    private CoinTemplate FindNearestCoin(Coin inputCoin, Func<CoinTemplate, double> coinTemplatePropertySelector, Func<Coin, double> coinPropertySelector)
+
+    private CoinTemplate FindNearestCoin(Coin inputCoin, Func<CoinTemplate, double> coinTemplatePropertySelector,
+        Func<Coin, double> coinPropertySelector)
     {
         var absoluteDifferences = new Dictionary<double, CoinTemplate>();
         foreach (var coinTemplate in _coinTemplates)
         {
-            var absoluteDifference = Math.Abs(coinTemplatePropertySelector(coinTemplate) - coinPropertySelector(inputCoin));
+            var absoluteDifference =
+                Math.Abs(coinTemplatePropertySelector(coinTemplate) - coinPropertySelector(inputCoin));
             absoluteDifferences.Add(absoluteDifference, coinTemplate);
         }
+
         var minimumDifference = absoluteDifferences.Keys.Min();
         return absoluteDifferences[minimumDifference];
     }
