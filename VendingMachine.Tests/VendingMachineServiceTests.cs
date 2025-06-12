@@ -15,6 +15,7 @@ public abstract class CoinInfos {
     public static CoinInfo Nickel = new() { Diameter = 21.21, Thickness = 1.95, Weight = 5.0 };
     public static CoinInfo Dime = new() { Diameter = 17.91, Thickness = 1.35, Weight = 2.268 };
     public static CoinInfo Quarter = new() { Diameter = 24.257, Thickness = 1.7526, Weight = 5.67 };
+    public static CoinInfo Penny = new() { Diameter = 19.05, Thickness = 1.52, Weight = 2.5 };
 }
 
 public class VendingMachineServiceTests
@@ -103,5 +104,22 @@ public class VendingMachineServiceTests
 
         // assert
         Assert.Equal("0.40", testDisplay.Output);
+    }
+
+    [Fact]
+    public void InsertAPenny()
+    {
+        // arrange
+        var ourPenny = new Coin(CoinInfos.Penny.Weight, CoinInfos.Penny.Diameter, CoinInfos.Penny.Thickness);
+
+        var testDisplay = new TestDisplay();
+        var testMachine = new VendingMachineImplementation(testDisplay);
+
+        // act
+        testMachine.InsertCoin(ourPenny);
+
+        // assert
+        Assert.Equal("INSERT COIN", testDisplay.Output);
+        // Assert.Contains(_returnBox, ourPenny);
     }
 }

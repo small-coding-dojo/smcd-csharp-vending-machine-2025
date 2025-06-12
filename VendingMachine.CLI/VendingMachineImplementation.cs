@@ -7,19 +7,8 @@ public class VendingMachineImplementation
 {
     private readonly ICanDisplay _display;
     private readonly ImmutableList<CoinTemplate> _coinTemplates;
-
+    private readonly double TolerancePercentage = 1;
     private decimal _balance = 0;
-
-    public VendingMachineImplementation(ICanDisplay display) 
-    {
-        _coinTemplates = ImmutableList.Create(
-            new CoinTemplate(5.0, 21.21, 1.95, 0.05m),
-            new CoinTemplate(2.268, 17.91, 1.35, 0.10m),
-            new CoinTemplate(5.67, 24.257, 1.7526, 0.25m)
-        );
-        _display = display;
-        _display.Show("INSERT COIN");
-    }
 
     public void InsertCoin(Coin inputCoin)
     {
@@ -30,7 +19,23 @@ public class VendingMachineImplementation
         
         var value = EvaluateCoin(inputCoin);
         _balance += value;
-        _display.Show(_balance.ToString( CultureInfo.InvariantCulture));
+
+        if (_balance > 0.0m)
+        {
+            _display.Show(_balance.ToString(CultureInfo.InvariantCulture));
+        }
+    }
+
+    public VendingMachineImplementation(ICanDisplay display) 
+    {
+        _coinTemplates = ImmutableList.Create(
+            new CoinTemplate(5.0, 21.21, 1.95, 0.05m),
+            new CoinTemplate(2.268, 17.91, 1.35, 0.10m),
+            new CoinTemplate(5.67, 24.257, 1.7526, 0.25m)
+            //new PennyTemplate(2.5, 19.05, 1.52, 0.05m) This is a help comment
+        );
+        _display = display;
+        _display.Show("INSERT COIN");
     }
 
     private decimal EvaluateCoin(Coin inputCoin)
@@ -46,11 +51,17 @@ public class VendingMachineImplementation
         // - Tolerance.DiameterPercent
         // - Tolerance.ThicknessPercent
         
-        // TODO: Smell we should have "three templates" FindNearestByWeight, ByDiameter, ByThickness
-        // The comparison and final result should be returned here as "final decided coin" or "invalid coin exception"
         var coinBasedOnWeight = FindNearestCoin(inputCoin, t => t.Weight, c => c.Weight);
         var coinBasedOnDiameter = FindNearestCoin(inputCoin, t => t.Diameter, c => c.Diameter);
+        var coinBasedOnThickness = FindNearestCoin(inputCoin, t => t.Thickness, c => c.Thickness);
+        
         // We need to verify that the difference is within the tolerance
+        var difference = Math.Abs(coinBasedOnDiameter.Diameter - inputCoin.Diameter);
+        var tolerance = coinBasedOnDiameter.Diameter * TolerancePercentage / 100.0;
+        if (difference > tolerance)
+        {
+            return 0.0m;
+        }
 
         return coinBasedOnDiameter.Value;
     }
