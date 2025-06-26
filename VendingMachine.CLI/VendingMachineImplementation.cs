@@ -40,7 +40,7 @@ public class VendingMachineImplementation
     {
         var coinBasedOnWeightDistance = FindNearestCoinByWeight(coin);
         var coinBasedOnDiameterDistance = FindNearestCoinByDiameter(coin);
-        var coinBasedOnThicknessDistance = FindNearestCoinByThickness(coin);
+        var coinBasedOnThicknessDistance = FindNearestCoin(t => t.Thickness, coin.Thickness);
 
         var isWeightDifferenceWithinTolerance = IsDifferenceWithinTolerance(coin, coinBasedOnWeightDistance, t => t.Weight, c => c.Weight);
         var isDiameterDifferenceWithinTolerance = IsDifferenceWithinTolerance(coin, coinBasedOnDiameterDistance, t => t.Diameter, c => c.Diameter);
@@ -69,15 +69,27 @@ public class VendingMachineImplementation
         return isDifferenceWithinTolerance;
     }
     
-    private CoinTemplate FindNearestCoinByWeight(Coin coin) => FindNearestCoin(coin, t=> t.Weight, c => c.Weight);
-    private CoinTemplate FindNearestCoinByDiameter(Coin coin) => FindNearestCoin(coin, t=> t.Diameter, c => c.Diameter);
-    private CoinTemplate FindNearestCoinByThickness(Coin coin) => FindNearestCoin(coin, t=> t.Thickness, c => c.Thickness);
-    private CoinTemplate FindNearestCoin(Coin coin, Func<CoinTemplate, double> templatePropertySelector, Func<Coin, double> coinPropertySelector)
+    private CoinTemplate FindNearestCoinByWeight(Coin coin)
+    {
+        Func<Coin, double> coinPropertySelector = c => c.Weight;
+        return FindNearestCoin(t => t.Weight, coinPropertySelector(coin));
+    }
+
+    private CoinTemplate FindNearestCoinByDiameter(Coin coin)
+    {
+        Func<Coin, double> coinPropertySelector = c => c.Diameter;
+        return FindNearestCoin(t => t.Diameter, coinPropertySelector(coin));
+    }
+
+    private CoinTemplate FindNearestCoinByThickness(Coin coin) => FindNearestCoin(t => t.Thickness, coin.Thickness);
+    
+
+    private CoinTemplate FindNearestCoin(Func<CoinTemplate, double> templatePropertySelector, double coinMeasurement)
     {
         var distances = new Dictionary<double, CoinTemplate>();
         foreach (var coinTemplate in _coinTemplates)
         {
-            var distance = Math.Abs(templatePropertySelector(coinTemplate) - coinPropertySelector(coin));
+            var distance = Math.Abs(templatePropertySelector(coinTemplate) - coinMeasurement);
             distances.Add(distance, coinTemplate);
         }
 
