@@ -15,7 +15,8 @@ public class VendingMachineImplementation
     {
         _coinTemplates = ImmutableList.Create(
             new CoinTemplate(5.0, 0.05m),
-            new CoinTemplate(2.268, 0.10m)
+            new CoinTemplate(2.268, 0.10m),
+            new CoinTemplate(5.67, 0.25m)
         );
 
         _display = display;
