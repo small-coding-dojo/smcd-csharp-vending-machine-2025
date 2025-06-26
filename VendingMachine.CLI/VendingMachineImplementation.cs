@@ -38,9 +38,9 @@ public class VendingMachineImplementation
 
     private decimal GetCoinValue(Coin coin)
     {
-        var coinBasedOnWeightDistance = FindNearestCoin(coin, t => t.Weight, c => c.Weight);
-        var coinBasedOnDiameterDistance = FindNearestCoin(coin, t => t.Diameter, c => c.Diameter);
-        var coinBasedOnThicknessDistance = FindNearestCoin(coin, t => t.Thickness, c => c.Thickness);
+        var coinBasedOnWeightDistance = FindNearestCoinByWeight(coin);
+        var coinBasedOnDiameterDistance = FindNearestCoinByDiameter(coin);
+        var coinBasedOnThicknessDistance = FindNearestCoinByThickness(coin);
 
         var isWeightDifferenceWithinTolerance = IsDifferenceWithinTolerance(coin, coinBasedOnWeightDistance, t => t.Weight, c => c.Weight);
         var isDiameterDifferenceWithinTolerance = IsDifferenceWithinTolerance(coin, coinBasedOnDiameterDistance, t => t.Diameter, c => c.Diameter);
@@ -68,7 +68,10 @@ public class VendingMachineImplementation
         
         return isDifferenceWithinTolerance;
     }
-
+    
+    private CoinTemplate FindNearestCoinByWeight(Coin coin) => FindNearestCoin(coin, t=> t.Weight, c => c.Weight);
+    private CoinTemplate FindNearestCoinByDiameter(Coin coin) => FindNearestCoin(coin, t=> t.Diameter, c => c.Diameter);
+    private CoinTemplate FindNearestCoinByThickness(Coin coin) => FindNearestCoin(coin, t=> t.Thickness, c => c.Thickness);
     private CoinTemplate FindNearestCoin(Coin coin, Func<CoinTemplate, double> templatePropertySelector, Func<Coin, double> coinPropertySelector)
     {
         var distances = new Dictionary<double, CoinTemplate>();
