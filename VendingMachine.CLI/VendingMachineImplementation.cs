@@ -5,7 +5,7 @@ namespace VendingMachine.CLI;
 
 public class VendingMachineImplementation
 {
-    private readonly record struct CoinTemplate(double Weight, decimal Value);
+    private readonly record struct CoinTemplate(double Weight, double Diameter, decimal Value);
     
     private readonly ICanDisplay _display;
     private decimal _balance;
@@ -14,9 +14,9 @@ public class VendingMachineImplementation
     public VendingMachineImplementation(ICanDisplay display)
     {
         _coinTemplates = ImmutableList.Create(
-            new CoinTemplate(5.0, 0.05m),
-            new CoinTemplate(2.268, 0.10m),
-            new CoinTemplate(5.67, 0.25m)
+            new CoinTemplate(5.0, 21.21, 0.05m),
+            new CoinTemplate(2.268, 17.91, 0.10m),
+            new CoinTemplate(5.67, 24.257, 0.25m)
         );
 
         _display = display;
@@ -26,14 +26,31 @@ public class VendingMachineImplementation
 
     public void InsertCoin(Coin coin)
     {
-        var distances = new Dictionary<double, CoinTemplate>();
+        var weightDistances = new Dictionary<double, CoinTemplate>();
         foreach (var template in _coinTemplates)
         {
             var weightDistance = Math.Abs(template.Weight - coin.Weight);
-            distances.Add(weightDistance, template);
+            weightDistances.Add(weightDistance, template);
+        }
+        
+        var diameterDistances = new Dictionary<double, CoinTemplate>();
+        foreach (var template in _coinTemplates)
+        {
+            var diameterDistance = Math.Abs(template.Diameter - coin.Diameter);
+            diameterDistances.Add(diameterDistance, template);
         }
 
-        _balance += distances[distances.Keys.Min()].Value;
+        var minDiameterDistance = diameterDistances.Keys.Min();
+        var tolerance = 1.0 / 100.0;
+        var actualTolerance = diameterDistances[minDiameterDistance].Diameter * tolerance;
+        var diameterDifference = Math.Abs(diameterDistances[minDiameterDistance].Diameter - coin.Diameter);
+
+        if (diameterDifference > actualTolerance)
+        {
+            return;
+        }
+
+        _balance += weightDistances[weightDistances.Keys.Min()].Value;
         _display.Show(_balance.ToString(CultureInfo.InvariantCulture));
     }
 }
