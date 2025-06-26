@@ -10,6 +10,7 @@ public class VendingMachineImplementation
     private readonly ICanDisplay _display;
     private decimal _balance;
     private readonly ImmutableList<CoinTemplate> _coinTemplates;
+    private readonly double _tolerance = 1.0 / 100.0;
 
     public VendingMachineImplementation(ICanDisplay display)
     {
@@ -26,31 +27,28 @@ public class VendingMachineImplementation
 
     public void InsertCoin(Coin coin)
     {
-        var weightDistances = new Dictionary<double, CoinTemplate>();
-        foreach (var template in _coinTemplates)
-        {
-            var weightDistance = Math.Abs(template.Weight - coin.Weight);
-            weightDistances.Add(weightDistance, template);
-        }
-        
-        var diameterDistances = new Dictionary<double, CoinTemplate>();
-        foreach (var template in _coinTemplates)
-        {
-            var diameterDistance = Math.Abs(template.Diameter - coin.Diameter);
-            diameterDistances.Add(diameterDistance, template);
-        }
+        var coinBasedOnWeightDistance = FindNearestCoin(coin, t => t.Weight, c => c.Weight);
+        var coinBasedOnDiameterDistance = FindNearestCoin(coin, t => t.Diameter, c => c.Diameter);
 
-        var minDiameterDistance = diameterDistances.Keys.Min();
-        var tolerance = 1.0 / 100.0;
-        var actualTolerance = diameterDistances[minDiameterDistance].Diameter * tolerance;
-        var diameterDifference = Math.Abs(diameterDistances[minDiameterDistance].Diameter - coin.Diameter);
+        var actualTolerance = coinBasedOnDiameterDistance.Diameter * _tolerance;
+        var diameterDifference = Math.Abs(coinBasedOnDiameterDistance.Diameter - coin.Diameter);
 
-        if (diameterDifference > actualTolerance)
+        if (diameterDifference < actualTolerance)
         {
-            return;
+            _balance += coinBasedOnWeightDistance.Value;
+            _display.Show(_balance.ToString(CultureInfo.InvariantCulture));
+        }
+    }
+
+    private CoinTemplate FindNearestCoin(Coin coin, Func<CoinTemplate, double> templatePropertySelector, Func<Coin, double> coinPropertySelector)
+    {
+        var distances = new Dictionary<double, CoinTemplate>();
+        foreach (var coinTemplate in _coinTemplates)
+        {
+            var distance = Math.Abs(templatePropertySelector(coinTemplate) - coinPropertySelector(coin));
+            distances.Add(distance, coinTemplate);
         }
 
-        _balance += weightDistances[weightDistances.Keys.Min()].Value;
-        _display.Show(_balance.ToString(CultureInfo.InvariantCulture));
+        return distances[distances.Keys.Min()];
     }
 }
