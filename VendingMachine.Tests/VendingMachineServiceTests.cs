@@ -106,6 +106,19 @@ public class VendingMachineServiceTests
 
         Assert.Equal("INSERT COIN", testDisplay.Output);
     }
+    
+    [Fact]
+    public void FreshMachine_InsertTamperedWeightCoin_ShowsInsertCoin()
+    {
+        var testDisplay = new TestDisplay();
+        var testMachine = new VendingMachineImplementation(testDisplay);
+
+        var ourCoin = new Coin(CoinInfos.Dime.Weight * 1.02, CoinInfos.Dime.Diameter, CoinInfos.Dime.Thickness);
+
+        testMachine.InsertCoin(ourCoin);
+
+        Assert.Equal("INSERT COIN", testDisplay.Output);
+    }
 
     [Fact]
     public void FreshMachine_InsertTamperedThicknessCoinAndNickel_Shows5Cents()

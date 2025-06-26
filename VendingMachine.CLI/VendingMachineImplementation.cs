@@ -42,10 +42,13 @@ public class VendingMachineImplementation
         var coinBasedOnDiameterDistance = FindNearestCoin(coin, t => t.Diameter, c => c.Diameter);
         var coinBasedOnThicknessDistance = FindNearestCoin(coin, t => t.Thickness, c => c.Thickness);
 
+        var isWeightDifferenceWithinTolerance = IsDifferenceWithinTolerance(coin, coinBasedOnWeightDistance, t => t.Weight, c => c.Weight);
         var isDiameterDifferenceWithinTolerance = IsDifferenceWithinTolerance(coin, coinBasedOnDiameterDistance, t => t.Diameter, c => c.Diameter);
         var isThicknessDifferenceWithinTolerance = IsDifferenceWithinTolerance(coin, coinBasedOnThicknessDistance, t => t.Thickness, c => c.Thickness);
 
-        var isWithinTolerance = isDiameterDifferenceWithinTolerance && isThicknessDifferenceWithinTolerance;
+        var isWithinTolerance = isWeightDifferenceWithinTolerance 
+                                && isDiameterDifferenceWithinTolerance 
+                                && isThicknessDifferenceWithinTolerance;
         
         var value = 0.0m;
 
