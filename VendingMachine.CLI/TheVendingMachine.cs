@@ -23,11 +23,14 @@ public class TheVendingMachine
         {
             _balance += 0.10m;
         }
-        else
+        else if (coin.Weight == 5.00)
         {
             _balance += 0.05m;
         }
 
-        _testDisplay.Show(_balance.ToString(CultureInfo.InvariantCulture));
+        if (_balance > 0.0m)
+        {
+            _testDisplay.Show(_balance.ToString(CultureInfo.InvariantCulture));
+        }
     }
 }

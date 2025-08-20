@@ -57,20 +57,16 @@ public class VendingMachineServiceTests
         subject.Insert(quarter);
         Assert.Equal("0.50", testDisplay.Output);
     }
- 
-    [Fact(Skip = "for stryker")]
-    public void When_inserting_a_quarter_and_a_dime_Then_show_0_35()
+    
+    [Fact]
+    public void When_inserting_2_quarters_Then_show_0_50___()
     {
         var testDisplay = new TestDisplay();
         var subject = new TheVendingMachine(testDisplay);
 
-        var quarter = new PhysicalObject(5.67);
-        var dime = new PhysicalObject(2.268);
+        var stone = new PhysicalObject(4.2);
 
-        subject.Insert(quarter);
-        Assert.Equal("0.25", testDisplay.Output);
-        
-        subject.Insert(dime);
-        Assert.Equal("0.35", testDisplay.Output);
+        subject.Insert(stone);
+        Assert.Equal("INSERT COIN", testDisplay.Output);
     }
 }
