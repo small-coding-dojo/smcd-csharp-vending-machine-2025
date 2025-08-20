@@ -23,3 +23,13 @@ dotnet run --project VendingMachine.CLI
 ```bash
 dotnet test
 ```
+
+### Test Mutations with Stryker .NET
+
+```bash
+# Install the stryker dotnet tool
+dotnet tool restore
+
+# Test mutations
+dotnet stryker
+```
