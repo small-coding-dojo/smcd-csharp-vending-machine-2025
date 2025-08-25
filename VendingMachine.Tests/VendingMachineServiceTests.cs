@@ -21,6 +21,15 @@ public class VendingMachineServiceTests
         machine.InsertCoin(coin);
         Assert.Equal("0.10", machine.Output);
     }
+    
+    [Fact]
+    public void SomeTest3()
+    {
+        var machine = new TheVendingMachine();
+        dynamic coin = new { Diameter= 17.91 };
+        machine.InsertCoin(coin);
+        Assert.Equal("0.10", machine.Output);
+    }
 }
 
 public class TheVendingMachine
@@ -30,7 +39,10 @@ public class TheVendingMachine
 
     public void InsertCoin(dynamic coin)
     {
-        _balance += 0.05m;
+        if (coin.Diameter == 17.91)
+            _balance += 0.10m;
+        else
+            _balance += 0.05m;
         
         Output = _balance.ToString("F2", CultureInfo.InvariantCulture);
     }
