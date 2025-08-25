@@ -72,7 +72,9 @@ public class TheVendingMachine
     {
         var theCoin = Coins.Stone;
         if (coin.Diameter >= Coins.Dime.MinDiameter && coin.Diameter <= Coins.Dime.MaxDiameter)
+        {
             theCoin = Coins.Dime;
+        }
         if (coin.Diameter >= Coins.Quarter.MinDiameter && coin.Diameter <= Coins.Quarter.MaxDiameter)
         {
             theCoin = Coins.Quarter;
