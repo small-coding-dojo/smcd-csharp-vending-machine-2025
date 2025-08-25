@@ -16,6 +16,8 @@ public class VendingMachineServiceTests
         dynamic coin = new { Diameter= 21.21 };
         machine.InsertCoin(coin);
         Assert.Equal("0.05", machine.Output);
+        machine.InsertCoin(coin);
+        Assert.Equal("0.10", machine.Output);
     }
 }
 
@@ -25,7 +27,10 @@ public class TheVendingMachine
 
     public void InsertCoin(dynamic coin)
     {
-        Output = "0.05";
+        if (Output == "0.05")
+            Output = "0.10";
+        else
+            Output = "0.05";
     }
 }
 
