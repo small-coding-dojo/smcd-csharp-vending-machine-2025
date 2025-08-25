@@ -30,12 +30,8 @@ public class TheVendingMachine
 
     public void InsertCoin(dynamic coin)
     {
-        _balance = 0.05m;
-        if (Output == "0.05")
-        {
-
-            _balance += 0.05m;
-        }
+        _balance += 0.05m;
+        
         Output = _balance.ToString("F2", CultureInfo.InvariantCulture);
     }
 }
