@@ -70,13 +70,13 @@ public class TheVendingMachine
 
     public void InsertCoin(dynamic coin)
     {
+        var theCoin = Coins.Nickel;
         if (coin.Diameter == 24.26)
             _balance += 0.30m;
         else if (coin.Diameter == 17.91)
             _balance += 0.10m;
         else if (coin.Diameter >= 21.21 && coin.Diameter <= 21.22)
         {
-            var theCoin = Coins.Nickel;
             _balance += theCoin.Value;
         }
         if(_balance > 0.0m)
