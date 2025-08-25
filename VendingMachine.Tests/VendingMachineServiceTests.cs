@@ -74,7 +74,10 @@ public class TheVendingMachine
         if (coin.Diameter == 17.91)
             theCoin = Coins.Dime;
         if (coin.Diameter == 24.26)
-            _balance += 0.30m;
+        {
+            theCoin = Coins.Quarter;
+            _balance += theCoin.Value;
+        }
         else if (coin.Diameter == 17.91)
             _balance += theCoin.Value;
         else if (coin.Diameter >= 21.21 && coin.Diameter <= 21.22)
