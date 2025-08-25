@@ -75,7 +75,7 @@ public class TheVendingMachine
             _balance += 0.10m;
         else if (coin.Diameter >= 21.21 && coin.Diameter <= 21.22)
         {
-            var theCoin = new Nickel();
+            var theCoin = new IdealCoin();
             _balance += 0.05m;
         }
         if(_balance > 0.0m)
@@ -83,3 +83,4 @@ public class TheVendingMachine
     }
 }
 
+public readonly record struct IdealCoin();
