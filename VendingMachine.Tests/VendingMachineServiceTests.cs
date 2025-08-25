@@ -66,7 +66,7 @@ public class TheVendingMachine
 {
     private decimal _balance;
     public string Output { get; set; } = "INSERT COIN";
-    private dynamic Coins = new { Nickel = new IdealCoin() };
+    private dynamic Coins = new { Nickel = new IdealCoin(21.20, 21.22, 0.05m) };
 
     public void InsertCoin(dynamic coin)
     {
@@ -84,4 +84,4 @@ public class TheVendingMachine
     }
 }
 
-public readonly record struct IdealCoin();
+public readonly record struct IdealCoin(double MinDiameter, double MaxDiameter, decimal Value);
