@@ -77,7 +77,7 @@ public class TheVendingMachine
         else if (coin.Diameter >= 21.21 && coin.Diameter <= 21.22)
         {
             var theCoin = Coins.Nickel;
-            _balance += 0.05m;
+            _balance += theCoin.Value;
         }
         if(_balance > 0.0m)
             Output = _balance.ToString("F2", CultureInfo.InvariantCulture);
