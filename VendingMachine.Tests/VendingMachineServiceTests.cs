@@ -70,7 +70,7 @@ public class TheVendingMachine
 
     public void InsertCoin(dynamic coin)
     {
-        var theCoin = Coins.Nickel;
+        var theCoin = Coins.Stone;
         if (coin.Diameter == 17.91)
             theCoin = Coins.Dime;
         if (coin.Diameter == 24.26)
