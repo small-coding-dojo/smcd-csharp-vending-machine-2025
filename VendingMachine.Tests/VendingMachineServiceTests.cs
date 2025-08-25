@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace VendingMachine.Tests;
 
 public class VendingMachineServiceTests
@@ -27,10 +29,11 @@ public class TheVendingMachine
 
     public void InsertCoin(dynamic coin)
     {
+        var balance = 0.05m;
         if (Output == "0.05")
             Output = "0.10";
         else
-            Output = "0.05";
+            Output = balance.ToString("F2", CultureInfo.InvariantCulture);
     }
 }
 
