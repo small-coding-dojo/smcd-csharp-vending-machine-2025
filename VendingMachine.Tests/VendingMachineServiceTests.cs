@@ -25,17 +25,18 @@ public class VendingMachineServiceTests
 
 public class TheVendingMachine
 {
+    private decimal _balance;
     public string Output { get; set; } = "INSERT COIN";
 
     public void InsertCoin(dynamic coin)
     {
-        var balance = 0.05m;
+        _balance = 0.05m;
         if (Output == "0.05")
         {
 
-            balance += 0.05m;
+            _balance += 0.05m;
         }
-        Output = balance.ToString("F2", CultureInfo.InvariantCulture);
+        Output = _balance.ToString("F2", CultureInfo.InvariantCulture);
     }
 }
 
