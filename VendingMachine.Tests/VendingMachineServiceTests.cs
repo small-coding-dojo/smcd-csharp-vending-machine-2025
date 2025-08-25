@@ -77,7 +77,7 @@ public class TheVendingMachine
         {
             theCoin = Coins.Quarter;
         }
-        else if (coin.Diameter >= Coins.Nickel.MinDiameter && coin.Diameter <= 21.22)
+        else if (coin.Diameter >= Coins.Nickel.MinDiameter && coin.Diameter <= Coins.Nickel.MaxDiameter)
         {
             theCoin = Coins.Nickel;
         }
