@@ -31,7 +31,11 @@ public class TheVendingMachine
     {
         var balance = 0.05m;
         if (Output == "0.05")
-            Output = "0.10";
+        {
+
+            balance += 0.05m;
+            Output = balance.ToString("F2", CultureInfo.InvariantCulture);
+        }
         else
             Output = balance.ToString("F2", CultureInfo.InvariantCulture);
     }
