@@ -36,8 +36,7 @@ public class TheVendingMachine
             balance += 0.05m;
             Output = balance.ToString("F2", CultureInfo.InvariantCulture);
         }
-        else
-            Output = balance.ToString("F2", CultureInfo.InvariantCulture);
+        Output = balance.ToString("F2", CultureInfo.InvariantCulture);
     }
 }
 
