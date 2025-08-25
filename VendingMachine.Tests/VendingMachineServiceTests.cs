@@ -66,7 +66,7 @@ public class TheVendingMachine
 {
     private decimal _balance;
     public string Output { get; set; } = "INSERT COIN";
-    private dynamic Coins = new { Nickel = 0 };
+    private dynamic Coins = new { Nickel = new IdealCoin() };
 
     public void InsertCoin(dynamic coin)
     {
