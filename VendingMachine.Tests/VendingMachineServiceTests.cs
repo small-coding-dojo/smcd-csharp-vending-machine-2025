@@ -66,7 +66,7 @@ public class TheVendingMachine
 {
     private decimal _balance;
     public string Output { get; set; } = "INSERT COIN";
-    private dynamic Coins = new { Nickel = new IdealCoin(21.20, 21.22, 0.05m), Dime = new IdealCoin(17.91,17.91,0.10m), Quarter = new IdealCoin(24.26,24.26,0.30m) };
+    private dynamic Coins = new { Nickel = new IdealCoin(21.20, 21.22, 0.05m), Dime = new IdealCoin(17.91,17.91,0.10m), Quarter = new IdealCoin(24.26,24.26,0.30m) , Stone = new IdealCoin(0,0,0.00m)};
 
     public void InsertCoin(dynamic coin)
     {
@@ -82,6 +82,7 @@ public class TheVendingMachine
             _balance += theCoin.Value;
         else if (coin.Diameter >= 21.21 && coin.Diameter <= 21.22)
         {
+            theCoin = Coins.Nickel;
             _balance += theCoin.Value;
         }
         if(_balance > 0.0m)
