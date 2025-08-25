@@ -75,7 +75,7 @@ public class TheVendingMachine
         if (coin.Diameter == 24.26)
             _balance += 0.30m;
         else if (coin.Diameter == 17.91)
-            _balance += 0.10m;
+            _balance += the2.Value;
         else if (coin.Diameter >= 21.21 && coin.Diameter <= 21.22)
         {
             _balance += theCoin.Value;
