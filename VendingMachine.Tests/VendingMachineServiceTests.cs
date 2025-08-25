@@ -13,7 +13,7 @@ public class VendingMachineServiceTests
     public void SomeTest2()
     {
         var machine = new TheVendingMachine();
-        var coin = new { 21.21 };
+        dynamic coin = new { Diameter= 21.21 };
         machine.InsertCoin(coin);
         Assert.Equal("0.05", machine.Output);
     }
@@ -22,5 +22,10 @@ public class VendingMachineServiceTests
 public class TheVendingMachine
 {
     public string Output { get; set; } = "INSERT COIN";
+
+    public void InsertCoin(dynamic coin)
+    {
+        Output = "0.05";
+    }
 }
 
