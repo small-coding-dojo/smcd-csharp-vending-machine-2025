@@ -73,7 +73,7 @@ public class TheVendingMachine
             _balance += 0.30m;
         else if (coin.Diameter == 17.91)
             _balance += 0.10m;
-        else if(coin.Diameter >= 21.21 && coin.Diameter <=21.22)
+        else if(coin.Diameter >= 21.21 && coin.Diameter <= 21.22)
             _balance += 0.05m;
         if(_balance > 0.0m)
             Output = _balance.ToString("F2", CultureInfo.InvariantCulture);
